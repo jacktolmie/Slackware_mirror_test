@@ -16,6 +16,11 @@
 # Slackware
 #----------------------------------------------------------------
 # Added by FuzzyBottom. All sed commands were from chatgpt. Way above my abilities ;)
+
+# Change to current slackware version or current
+#version=15.0
+version=current
+
 # Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: (us|ca)
 target="(ca)"
 
@@ -30,8 +35,9 @@ MIRRORS=$(<server.txt)
 cp /etc/slackpkg/mirrors /etc/slackpkg/mirrors.old
 > /etc/slackpkg/mirrors
 for MIRROR in $MIRRORS; do
-    echo "#$MIRROR" >> /etc/slackpkg/mirrors
+    echo "#${MIRROR}slackware64-$version" >> /etc/slackpkg/mirrors
 done
+
 
 rm server.txt
 # End added by FuzzyBottom
