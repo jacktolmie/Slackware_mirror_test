@@ -22,7 +22,7 @@ version=15.0
 if [[ $1 != "" ]]
     then version=$1
 fi
-version=current
+#version=current
 
 # Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: (us|ca)
 target="(ca)"
