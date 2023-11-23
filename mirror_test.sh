@@ -25,10 +25,16 @@ fi
 #version=current
 
 # Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: (us|ca)
-target="(ca)"
+target="(ca|us)"
+if [[ $2 !=  "" ]]
+    then target=$2
+fi
 
 # Select protocol(s) to use. Use | to separate them eg: (http|ftp)
-protocol="(http|ftp)"
+protocol="(http)"
+if [[ $3 != "" ]]
+    then protocol=$3
+fi
 
 # Fetch and filter mirrors based on selected countries and protocol
 curl -s https://mirrors.slackware.com/mirrorlist/ | grep -E "^$target" | sed -E "s/^$target\s*//; s:<a[^>]*>([^<]*)</a>:\1:" | grep -E "^$protocol" >> server.txt
@@ -40,7 +46,6 @@ cp /etc/slackpkg/mirrors /etc/slackpkg/mirrors.old
 for MIRROR in $MIRRORS; do
     echo "#${MIRROR}slackware64-$version" >> /etc/slackpkg/mirrors
 done
-
 
 rm server.txt
 # End added by FuzzyBottom
