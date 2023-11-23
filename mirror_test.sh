@@ -17,8 +17,11 @@
 #----------------------------------------------------------------
 # Added by FuzzyBottom. All sed commands were from chatgpt. Way above my abilities ;)
 
-# Change to current slackware version or current
-#version=15.0
+# Change to current slackware version or current. Optional: Pass argument when calling to add version at script call (./mirror_test.sh 15.0).
+version=15.0
+if [[ $1 != "" ]]
+    then version=$1
+fi
 version=current
 
 # Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: (us|ca)
