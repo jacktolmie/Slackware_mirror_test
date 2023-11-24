@@ -14,7 +14,7 @@ rm $ROOTDIR/slackpkg+*
 # Add mirror to download files/updates. Update version as required
 VERSION=15.0 # change to latest version or current
 
-# Multiple protocols or targets require quotes and pipe: "http|ftp" or "us|ca" etc.
+# Multiple protocols or targets require a pipe: "http|ftp" or "us|ca" etc.
 PROTOCOL="http"
 TARGET="us"
 
