@@ -17,34 +17,33 @@
 #----------------------------------------------------------------
 # Added by FuzzyBottom. All sed commands were from chatgpt. Way above my abilities ;)
 
-# Change to current slackware version or current. Optional: Pass argument when calling to add version at script call (./mirror_test.sh 15.0).
-version=15.0
+# Change to current slackware version or current. Optional: Pass arguments when calling to add version at script call (./mirror_test.sh 15.0 "ca|us" "http|ftp" (Version, countries, protocols)).
+version=15.0 # You can also use current
 if [[ $1 != "" ]]
     then version=$1
 fi
-#version=current
 
-# Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: (us|ca)
-target="(ca|us)"
+# Select country(ies) mirrors from /etc/slackpkg/mirrors as desired. Use | to separate them eg: "us|ca"
+target="us"
 if [[ $2 !=  "" ]]
     then target=$2
 fi
 
-# Select protocol(s) to use. Use | to separate them eg: (http|ftp)
-protocol="(http)"
+# Select protocol(s) to use. Use | to separate them eg: "http|ftp"
+protocol="http"
 if [[ $3 != "" ]]
     then protocol=$3
 fi
 
 # Fetch and filter mirrors based on selected countries and protocol
-curl -s https://mirrors.slackware.com/mirrorlist/ | grep -E "^$target" | sed -E "s/^$target\s*//; s:<a[^>]*>([^<]*)</a>:\1:" | grep -E "^$protocol" >> server.txt
+curl -s https://mirrors.slackware.com/mirrorlist/ | grep -E "^($target)" | sed -E "s/^($target)\s*//; s:<a[^>]*>([^<]*)</a>:\1:" | grep -E "^($protocol)" >> server.txt
 
 # Read mirror list into a variable
 MIRRORS=$(<server.txt)
 cp /etc/slackpkg/mirrors /etc/slackpkg/mirrors.old
 > /etc/slackpkg/mirrors
 for MIRROR in $MIRRORS; do
-    echo "#${MIRROR}slackware64-$version" >> /etc/slackpkg/mirrors
+    echo "#${MIRROR}slackware64-$version" | sed 's/ *$//' >> /etc/slackpkg/mirrors
 done
 
 rm server.txt
@@ -78,14 +77,16 @@ for MIRROR in $MIRRORS; do
     fi
 done
 
-# Find the fastest mirror
-FASTEST=$(echo -e "$RESULTS" | sort -hr | head -n 1 | sed -n -E 's/.*?(https?:\/\/[^\/ ]+\/slackware\/).*/\1/p')
-
 echo -e "\nResults:"
 echo -e "$RESULTS" | sort -hr
 
 # Added by FuzzyBottom.
-echo "Fastest is: $FASTEST"
-echo $RESULTS | sort -hr | sed -n -E "s/.*?($protocol:\/\/[^\/ ]+\/slackware\/).*/\1/p;q" /etc/slackpkg/mirrors
-sed -i "s|^#$FASTEST|$FASTEST|" /etc/slackpkg/mirrors
+# Find the fastest mirror to remove comment from mirrors list.
+FASTEST=$(echo "$MIRRORS" | awk -v prot="$protocol" -v version="$version" '!/#/ && $0 ~ prot { print $0 }' | sort -hr | head -n 1)
+
+# Remove trailing white spaces.
+FASTEST="${FASTEST%"${FASTEST##*[![:space:]]}"}"
+
+sed -i "s|^#$FASTEST|${FASTEST//#/}|g" /etc/slackpkg/mirrors
+
 # End added by FuzzyBottom.
