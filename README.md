@@ -12,7 +12,7 @@ The original script I used is here <a href=https://github.com/bassmadrigal/scrip
   </ul>
 </p>
 <p>
-  This can be used in a script if you want when you finish installing Slackware, and want to update it. I created a script that will run the following:
+  This can be used in a script if you want when you finish installing Slackware, and want to update it. I created a script (slack_post_install_setup.sh) that will run the following:
   <ul>
     <li>Install slackpkg+.</li>
     <li>Find fastest mirror.</li>
