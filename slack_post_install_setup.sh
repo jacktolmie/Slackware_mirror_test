@@ -1,6 +1,6 @@
 #/bin/bash
 echo "Change directory to /root/Downloads"
-mkdir /root/Downloads
+if [[ ! -d "/root/Downloads" ]]; then mkdir /root/Downloads; fi
 ROOTDIR=/root/Downloads
 cd $ROOTDIR
 
