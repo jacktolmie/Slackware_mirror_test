@@ -1,5 +1,6 @@
 #/bin/bash
 echo "Change directory to /root/Downloads"
+mkdir /root/Downloads
 ROOTDIR=/root/Downloads
 cd $ROOTDIR
 
