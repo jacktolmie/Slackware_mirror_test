@@ -47,7 +47,6 @@ lftp -c "open http://www.slackware.com/~alien/multilib/ ; mirror -c -e $VERSION"
 cd $VERSION
 upgradepkg --reinstall --install-new *.t?z
 upgradepkg --install-new slackware64-compat32/*-compat32/*.t?z
-printf "\n//Multilib:\n[0-9]+alien\n[0-9]+compat32\n" >> /etc/slackpkg/blacklist
 
 # Change slackpkg.conf to default to not select all packages
 echo "Changing selecting all packages from on to off"
